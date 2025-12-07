@@ -43,7 +43,7 @@ exports.getPlayers = function (req, res) {
   });
 };
 
-// // get players by team abv
+// get players by team abv
 exports.getPlayersByTeam = function (req, res) {
   let team = req.params.team;
   connection.query(
@@ -56,6 +56,34 @@ exports.getPlayersByTeam = function (req, res) {
     function (err, rows, fields) {
       if (err) throw err;
 
+      res.status(200);
+      res.send(JSON.stringify(rows));
+    }
+  );
+};
+
+// get player by id
+exports.getPlayerById = function (req, res) {
+  let id = req.params.id;
+  connection.query(
+    `SELECT * FROM players WHERE id = ?`,
+    [id],
+    function (err, rows, fields) {
+      res.status(200);
+      res.send(JSON.stringify(rows));
+    }
+  );
+};
+
+// get players with team names
+exports.getPlayersTeamNames = function (req, res) {
+  connection.query(
+    `SELECT p.*, t.teamDisplayName 
+        FROM players p
+        JOIN teams t
+        ON p.teamid = t.teamID`,
+    function (err, rows, fields) {
+      if (err) throw err;
       res.status(200);
       res.send(JSON.stringify(rows));
     }
@@ -85,3 +113,13 @@ exports.getScoresByWeek = function (req, res) {
     }
   );
 };
+
+exports.getWeeks = function (req, res){
+  connection.query(
+    `SELECT * FROM weeks`, function (err, rows, fields){
+      if (err) throw err;
+      res.status(200);
+      res.send(JSON.stringify(rows));
+    }
+  );
+}
