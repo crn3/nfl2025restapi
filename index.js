@@ -1,8 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var cors = require("cors");
-//
-var model = require("./model/db.js"); //
+var model = require("./model/db.js");
 
 var app = express();
 app.use(cors());
@@ -47,7 +46,7 @@ app.route("/scores/").get(function (req, res) {
   model.getScores(req, res);
 });
 
-//get scores by week
+// get scores by week
 app.route("/scores/:week").get(function (req, res) {
   model.getScoresByWeek(req, res);
 });
@@ -57,6 +56,24 @@ app.route("/weeks").get(function (req, res) {
   model.getWeeks(req, res);
 });
 
+// get game info by id
+app.route("/scores/game/:id").get(function(req,res){
+  model.getGame(req,res);
+});
+
+// get user login details
+app.route("/users").get(function(req,res){
+  model.getUsers(req,res);
+})
+
+// post game score updates
+app.route("/scores/game/:id").post(function(req,res){
+  console.log("POST route hit", req.params.id);
+  console.log("Body:", req.body);
+  model.updateGameScore(req,res);
+});
+
 var server = app.listen(3000, function () {
   console.log("Server listening on port 3000");
 });
+
